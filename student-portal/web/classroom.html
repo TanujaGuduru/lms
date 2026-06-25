@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Class — CodeGurukul Student Portal</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/classroom.css" />
+</head>
+<body class="classroom-body">
+  <div class="classroom">
+    <div class="classroom-header">
+      <span id="class-title">Loading class…</span>
+      <span id="connection-status" class="status-pill">connecting…</span>
+    </div>
+
+    <div class="classroom-main">
+      <div id="video-grid" class="video-grid">
+        <div class="video-tile" id="tile-self">
+          <video id="video-self" autoplay playsinline muted></video>
+          <span class="tile-label">You</span>
+        </div>
+      </div>
+
+      <div id="chat-panel" class="chat-panel hidden">
+        <div id="chat-messages" class="chat-messages"></div>
+        <form id="chat-form" class="chat-form">
+          <input type="text" id="chat-input" maxlength="1000" placeholder="Message the class…" autocomplete="off" />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="classroom-controls">
+      <button id="btn-mic" class="control-btn active">Mic</button>
+      <button id="btn-cam" class="control-btn active">Camera</button>
+      <button id="btn-chat" class="control-btn">Chat</button>
+      <button id="btn-leave" class="control-btn danger">Leave</button>
+    </div>
+
+    <div id="alert-box" class="alert alert-error hidden" style="margin: 0 1rem 1rem;"></div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/classroom.js"></script>
+</body>
+</html>

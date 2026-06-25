@@ -1,0 +1,21 @@
+Options -MultiViews -Indexes
+RewriteEngine On
+
+# Block direct access to application internals — this folder sits directly
+# under public_html/api/ on GoDaddy (no separate webroot-vs-app split), so
+# these rules are the only thing keeping app/config/etc. off the public web.
+RewriteRule ^(\.env|\.env\.example)$ - [F,L]
+RewriteRule ^(app|bootstrap|config|routes|storage|database)/.*$ - [F,L]
+
+# Serve any real static file directly (none expected here, but harmless)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Everything else under /api/... goes through index.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+</IfModule>

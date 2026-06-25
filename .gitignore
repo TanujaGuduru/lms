@@ -1,0 +1,48 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies (not required at runtime, but ignore if ever installed)
+/vendor/
+
+# Runtime-generated content
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/cache/*
+!/storage/cache/.gitkeep
+/storage/backups/*
+!/storage/backups/.gitkeep
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# student-portal/api — same runtime-generated content, separate app/storage tree
+student-portal/api/storage/logs/*
+!student-portal/api/storage/logs/.gitkeep
+student-portal/api/storage/cache/*
+!student-portal/api/storage/cache/.gitkeep
+student-portal/api/storage/app/backups/*
+!student-portal/api/storage/app/backups/.gitkeep
+student-portal/api/storage/app/archives/*
+!student-portal/api/storage/app/archives/.gitkeep
+student-portal/api/storage/app/reports/*
+!student-portal/api/storage/app/reports/.gitkeep
+student-portal/api/storage/app/recordings/*
+!student-portal/api/storage/app/recordings/.gitkeep
+student-portal/api/storage/app/materials/*
+!student-portal/api/storage/app/materials/.gitkeep
+student-portal/api/storage/app/offline/*
+!student-portal/api/storage/app/offline/.gitkeep
+student-portal/api/storage/app/certificates/*
+!student-portal/api/storage/app/certificates/.gitkeep
+
+# Regeneratable build artifact, not source
+/deploy-packages/*.zip
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

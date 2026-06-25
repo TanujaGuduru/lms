@@ -1,0 +1,29 @@
+{
+  "name": "codegurukul/lms",
+  "description": "CodeGurukul — Production-Grade Learning Management System",
+  "type": "project",
+  "keywords": ["lms", "e-learning", "education", "php", "mvc"],
+  "homepage": "https://codegurukul.in",
+  "license": "proprietary",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require": {
+    "php": "^8.3"
+  },
+  "require-dev": {},
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "scripts": {
+    "start": "php -S localhost:8000 -t public"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "extra": {
+    "note": "This project uses a manual spl_autoload_register in public/index.php and does NOT require Composer autoloading to run. composer.json is provided for project metadata and tooling compatibility only."
+  }
+}

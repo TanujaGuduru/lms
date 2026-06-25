@@ -1,0 +1,70 @@
+-- ============================================================
+-- REFERENCE / DECISION DOCUMENT — NOT a runnable migration.
+--
+-- docs/student-module/07-scaling-strategy.md §5 calls for MySQL native
+-- range partitioning (by month, on `created_at`) as "the mechanical
+-- complement to archival" for the high-volume ledgers
+-- (credit_transactions, xp_transactions, ai_messages, code_executions,
+-- communication_logs). Attempting this for real against this schema
+-- surfaced a hard MySQL/InnoDB restriction the doc doesn't mention and
+-- this build hadn't hit before:
+--
+--   ERROR 1506 (HY000): Foreign keys are not yet supported in
+--   conjunction with partitioning
+--
+-- InnoDB refuses to partition ANY table that has a foreign key in either
+-- direction — as either the child (a FOREIGN KEY clause on the table
+-- itself) or as a parent another table's FOREIGN KEY references. Every
+-- single one of these five tables has at least one outbound FK
+-- (credit_transactions → credit_wallets/payments, xp_transactions/
+-- communication_logs → users, code_executions → code_workspaces/users,
+-- ai_messages → ai_conversations) — confirmed by actually running the
+-- ALTER TABLE ... PARTITION BY RANGE statements against a real MySQL 8.4
+-- instance, not assumed. None of them can be partitioned as currently
+-- defined. This is a genuine schema-level constraint, not a syntax
+-- mistake to fix and retry.
+--
+-- The only way to make any of these tables partitionable is to DROP its
+-- foreign key constraint(s) and enforce that referential integrity in
+-- application code instead of at the database level — a real, valid
+-- pattern at large scale (it's exactly why some high-scale systems give up
+-- DB-level FK enforcement on their hottest tables), but a materially
+-- bigger tradeoff than "run a migration": it removes a guarantee the rest
+-- of this codebase currently relies on implicitly (e.g. ON DELETE CASCADE
+-- cleanup when a wallet/conversation/workspace is deleted would have to be
+-- re-implemented in PHP). That's a conscious call for whoever operates
+-- this at 100k-student scale to make deliberately, not something to
+-- silently script here.
+--
+-- What this build does instead, and why it's enough at any GoDaddy-only
+-- scale this project is committed to:
+--   - cron/archive-ledger-content.php already strips the genuinely large
+--     body columns (ai_messages.content, code_executions.stdin/stdout/
+--     stderr, exam_responses.response/grader_feedback) once old, which is
+--     the part of "unbounded ledger growth" that actually threatens disk
+--     size and table-scan cost — partitioning was only ever the
+--     *secondary* mechanical complement to that, per the doc's own framing.
+--   - credit_transactions/xp_transactions/communication_logs have no large
+--     body column to strip — their growth is purely row-count, mitigated
+--     by every existing query against them already filtering on an
+--     indexed column (wallet_id+created_at, student_id+created_at,
+--     user_id+trigger_event respectively — see each table's own KEY
+--     definitions in schema_student_portal.sql), so an un-partitioned
+--     table stays query-fast via those indexes regardless of total row
+--     count, just not space-bounded the way a partitioned-and-rotated
+--     table would be.
+--
+-- If a future operator decides the FK-removal tradeoff above is worth it,
+-- the partitioning syntax itself (once FKs are dropped) is the same shape
+-- already proven working elsewhere in MySQL — RANGE partitioning by
+-- TO_DAYS(created_at) with a composite PRIMARY KEY (id, created_at), e.g.:
+--
+--   ALTER TABLE `xp_transactions` DROP FOREIGN KEY <constraint_name>;
+--   ALTER TABLE `xp_transactions` DROP PRIMARY KEY, ADD PRIMARY KEY (`id`, `created_at`);
+--   ALTER TABLE `xp_transactions` PARTITION BY RANGE (TO_DAYS(created_at)) (
+--     PARTITION p202601 VALUES LESS THAN (TO_DAYS('2026-02-01')),
+--     PARTITION p_future VALUES LESS THAN MAXVALUE
+--   );
+--   -- then re-add the FK if/when InnoDB partitioning ever lifts this
+--   -- restriction, or enforce it in App\Core\Database-layer code instead.
+-- ============================================================

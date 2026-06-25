@@ -1,0 +1,56 @@
+# Reference CI/CD scaffolding — docs/student-module/08-infrastructure-devops.md
+# §1's GoDaddy path, adapted to this actual codebase rather than the doc's
+# Laravel-flavoured description. This repo is not yet a git remote with
+# GitHub Actions enabled, and there is no real GoDaddy SSH target to
+# deploy to from this environment — this file is the documented *shape* of
+# the pipeline 08 §1 calls for, not something that has been run end to end
+# (unlike every cron/controller in this codebase, which has been). Wire up
+# the commented-out secrets/host once a real remote + GoDaddy SSH access exist.
+#
+# Two real adaptations from the doc's own description, not omissions:
+#   - No `composer install` step — this codebase has zero Composer
+#     dependencies at runtime by design (see App\Core\AiGateway's
+#     docblock: "no Composer dependencies at runtime convention," same
+#     reasoning as SimplePdf/SimpleMailer being hand-rolled instead of
+#     vendored). Nothing to install.
+#   - No `php artisan migrate` / cache-rebuild step — there is no
+#     migration framework or cache layer in this plain-PHP-MVC app (see
+#     scripts/check-additive-schema-changes.php's docblock for how schema
+#     changes are actually applied and guarded instead).
+
+name: Deploy Student Portal (GoDaddy)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'student-portal/api/**'
+
+jobs:
+  schema-discipline-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Verify schema changes are additive-only (08 §1)
+        run: php student-portal/api/scripts/check-additive-schema-changes.php
+      - name: Lint every PHP file
+        run: find student-portal/api -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  deploy:
+    needs: schema-discipline-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.GODADDY_SSH_HOST }}
+          username: ${{ secrets.GODADDY_SSH_USER }}
+          key: ${{ secrets.GODADDY_SSH_KEY }}
+          script: |
+            cd ~/public_html/api
+            git pull origin main
+            # No composer install / artisan migrate — see this file's header comment.
