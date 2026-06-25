@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam — CodeGurukul Student Portal</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">CodeGurukul</span>
+    <span id="timer" class="tag tag-warning hidden"></span>
+    <button id="logout-btn">Log out</button>
+  </div>
+
+  <div class="container">
+    <div id="alert-box" class="alert alert-error hidden"></div>
+
+    <div id="intro-panel">
+      <h2 id="exam-title">Loading…</h2>
+      <p class="subtitle" id="exam-meta"></p>
+      <p id="exam-instructions"></p>
+      <button id="start-btn" class="btn-primary" style="width:auto; padding:0.6rem 1.5rem;">Start exam</button>
+    </div>
+
+    <form id="questions-form" class="hidden"></form>
+    <button id="submit-btn" class="btn-primary hidden" style="width:auto; padding:0.6rem 1.5rem; margin-top:1rem;">Submit exam</button>
+
+    <div id="result-panel" class="hidden"></div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/exam.js"></script>
+</body>
+</html>

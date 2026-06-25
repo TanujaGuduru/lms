@@ -22,6 +22,8 @@
     }
   }
 
+  Nav.init('dashboard');
+
   async function loadUpcomingClasses() {
     const container = document.getElementById('upcoming-classes');
     try {

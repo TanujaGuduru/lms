@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schedule — CodeGurukul Student Portal</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">CodeGurukul</span>
+    <button id="logout-btn">Log out</button>
+  </div>
+
+  <div class="container">
+    <div class="page-header"><h2>Schedule</h2></div>
+    <div id="alert-box" class="alert alert-error hidden"></div>
+    <div id="success-box" class="alert alert-success hidden"></div>
+
+    <div class="tabs">
+      <button data-tab="calendar" class="active">Calendar</button>
+      <button data-tab="reschedule">Reschedule requests</button>
+      <button data-tab="teacher-change">Teacher change requests</button>
+    </div>
+
+    <div id="tab-calendar">
+      <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
+        <button id="prev-month-btn" class="btn-secondary">← Prev</button>
+        <strong id="month-label"></strong>
+        <button id="next-month-btn" class="btn-secondary">Next →</button>
+      </div>
+      <div id="calendar-events"></div>
+    </div>
+
+    <div id="tab-reschedule" class="hidden">
+      <div class="list-card">
+        <h4>Request a reschedule</h4>
+        <div class="field"><label>Class (live_class_id)</label><input id="r-class-id" type="number" /></div>
+        <div class="field"><label>Requested new date/time</label><input id="r-datetime" type="datetime-local" /></div>
+        <div class="field"><label>Reason</label><input id="r-reason" type="text" /></div>
+        <button id="r-submit-btn" class="btn-primary" style="width:auto; padding:0.5rem 1.25rem;">Submit request</button>
+      </div>
+      <div id="reschedule-list"></div>
+    </div>
+
+    <div id="tab-teacher-change" class="hidden">
+      <div class="list-card">
+        <h4>Request a teacher change</h4>
+        <div class="field"><label>Batch ID</label><input id="t-batch-id" type="number" /></div>
+        <div class="field">
+          <label>Reason</label>
+          <select id="t-reason">
+            <option value="teaching_mismatch">Teaching style mismatch</option>
+            <option value="language_mismatch">Language mismatch</option>
+            <option value="schedule_mismatch">Schedule mismatch</option>
+            <option value="complaint">Complaint</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Details</label><textarea id="t-details" rows="3"></textarea></div>
+        <button id="t-submit-btn" class="btn-primary" style="width:auto; padding:0.5rem 1.25rem;">Submit request</button>
+      </div>
+      <div id="teacher-change-list"></div>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/schedule.js"></script>
+</body>
+</html>

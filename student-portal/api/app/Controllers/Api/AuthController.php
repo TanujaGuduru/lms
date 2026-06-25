@@ -179,6 +179,29 @@ class AuthController extends Controller
             );
         }
 
+        // IMPLEMENTATION GAP-FILL: no endpoint anywhere let the frontend
+        // discover its own current enrollment_id/course_id — every other
+        // endpoint that needs one (ProgressController, EnrollmentController)
+        // requires the caller to already have it, with no "give me mine"
+        // entry point. /auth/me is the one call every page already makes
+        // on load, so surfacing it here means every page gets it for free
+        // rather than adding a second round-trip. Only the most recent
+        // active enrollment — same "one course at a time" assumption
+        // App\Controllers\Api\BatchController::current() already makes.
+        if ($user['role_slug'] === 'student') {
+            $enrollment = $this->db->fetchOne(
+                "SELECT e.id, e.course_id, c.title AS course_title FROM enrollments e
+                 JOIN courses c ON c.id = e.course_id
+                 WHERE e.user_id = ? AND e.status = 'active' ORDER BY e.enrolled_at DESC LIMIT 1",
+                [$user['id']]
+            );
+            $shaped['current_enrollment'] = $enrollment ? [
+                'enrollment_id' => (int) $enrollment['id'],
+                'course_id' => (int) $enrollment['course_id'],
+                'course_title' => $enrollment['course_title'],
+            ] : null;
+        }
+
         return $shaped;
     }
 }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — CodeGurukul Student Portal</title>
+  <title>Notifications — CodeGurukul Student Portal</title>
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
@@ -12,22 +12,16 @@
     <button id="logout-btn">Log out</button>
   </div>
 
-  <div class="container">
-    <div class="welcome">
-      <h2 id="welcome-name">Loading…</h2>
-      <p id="welcome-role"></p>
+  <div class="container" style="max-width: 700px;">
+    <div class="page-header">
+      <h2>Notifications</h2>
+      <button id="mark-all-btn" class="btn-secondary">Mark all read</button>
     </div>
-
     <div id="alert-box" class="alert alert-error hidden"></div>
-
-    <div style="margin-top: 2rem;">
-      <h3>Upcoming classes</h3>
-      <div id="upcoming-classes"><p class="subtitle">Loading…</p></div>
-    </div>
+    <div id="list"><p class="subtitle">Loading…</p></div>
   </div>
 
   <script src="assets/js/api.js"></script>
-  <script src="assets/js/nav.js"></script>
-  <script src="assets/js/dashboard.js"></script>
+  <script src="assets/js/notifications.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 :root {
   --primary: #6366f1;
   --primary-dark: #4f46e5;
+  --accent: #0ea5e9;
   --bg: #f8fafc;
   --surface: #ffffff;
   --text: #1e293b;
@@ -20,6 +21,11 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+a, button {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
 
 .center-screen {
@@ -90,11 +96,17 @@ button.btn-primary {
 
 button.btn-primary:hover {
   background: var(--primary-dark);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+button.btn-primary:active {
+  transform: translateY(1px);
 }
 
 button.btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .alert {
@@ -155,4 +167,352 @@ button.btn-primary:disabled {
 
 .hidden {
   display: none !important;
+}
+
+/* Navigation */
+.topnav {
+  display: flex;
+  gap: 1.25rem;
+  flex: 1;
+  margin-left: 2rem;
+  overflow-x: auto;
+}
+
+.topnav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.25rem 0;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+
+.topnav a:hover,
+.topnav a.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  margin-left: auto;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+.nav-bell {
+  position: relative;
+  text-decoration: none;
+  font-size: 1.1rem;
+  margin-right: 0.75rem;
+}
+
+.nav-bell-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 5px;
+  line-height: 1.2;
+}
+
+/* Page heading + secondary button */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.page-header h2 {
+  margin: 0;
+}
+
+button.btn-secondary {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.btn-secondary:hover {
+  background: var(--bg);
+}
+
+button.btn-danger {
+  background: #fff;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Wide list cards (used for notes, assignments, tickets, certificates, etc.) */
+.list-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 0.85rem;
+}
+
+.list-card-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.list-card h4 {
+  margin: 0 0 0.3rem;
+}
+
+.empty-state {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 2.5rem 1rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+/* Tags / badges / pills */
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: var(--primary-dark);
+}
+
+.tag-success { background: #f0fdf4; color: var(--success); }
+.tag-warning { background: #fffbeb; color: #b45309; }
+.tag-danger { background: #fef2f2; color: var(--danger); }
+.tag-muted { background: var(--bg); color: var(--text-muted); }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  padding: 0.6rem 0.25rem;
+  margin-right: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs button.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Forms (textarea, select to match .field input styling) */
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Simple modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 100;
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* Stat tiles (gamification / progress) */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  text-align: center;
+}
+
+.stat-tile .stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-tile .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Clickable list-cards (notes, assignments, tickets, recordings) get a
+   visible affordance — otherwise "this whole card is a button" isn't
+   discoverable until the cursor happens to land on it. */
+.list-card.clickable {
+  cursor: pointer;
+}
+
+.list-card.clickable:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.12);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+  .topbar {
+    flex-wrap: wrap;
+    padding: 0.85rem 1rem;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .topnav {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    margin: 0.75rem 0 0;
+    order: 10;
+    flex-basis: 100%;
+  }
+
+  .topnav.open {
+    display: flex;
+  }
+
+  .topnav a {
+    padding: 0.65rem 0.25rem;
+    border-bottom: 1px solid var(--border);
+    border-left: 3px solid transparent;
+  }
+
+  .topnav a:hover,
+  .topnav a.active {
+    border-bottom-color: var(--border);
+    border-left-color: var(--primary);
+    background: var(--bg);
+  }
+
+  .container {
+    padding: 1.25rem 1rem;
+  }
+
+  .page-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .list-card-row {
+    flex-direction: column;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tabs {
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .modal-box {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
 }

@@ -42,6 +42,9 @@ const Api = (() => {
   return {
     get: (path) => request('GET', path),
     post: (path, body) => request('POST', path, body),
+    put: (path, body) => request('PUT', path, body),
+    patch: (path, body) => request('PATCH', path, body),
+    delete: (path) => request('DELETE', path),
     setToken: (value) => localStorage.setItem('auth_token', value),
     clearToken: () => localStorage.removeItem('auth_token'),
     isAuthenticated: () => !!token(),

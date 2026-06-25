@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progress — CodeGurukul Student Portal</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">CodeGurukul</span>
+    <button id="logout-btn">Log out</button>
+  </div>
+
+  <div class="container">
+    <div class="page-header"><h2>Progress</h2></div>
+    <div id="alert-box" class="alert alert-error hidden"></div>
+
+    <div class="tabs">
+      <button data-tab="overview" class="active">Overview</button>
+      <button data-tab="course">Course progress</button>
+      <button data-tab="leaderboard">Leaderboard</button>
+      <button data-tab="insights">AI insights</button>
+    </div>
+
+    <div id="tab-overview"></div>
+    <div id="tab-course" class="hidden"></div>
+    <div id="tab-leaderboard" class="hidden"></div>
+    <div id="tab-insights" class="hidden"></div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/progress.js"></script>
+</body>
+</html>

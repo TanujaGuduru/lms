@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Library — CodeGurukul Student Portal</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">CodeGurukul</span>
+    <button id="logout-btn">Log out</button>
+  </div>
+
+  <div class="container">
+    <div class="page-header"><h2>Library</h2></div>
+    <div id="alert-box" class="alert alert-error hidden"></div>
+
+    <div class="tabs">
+      <button data-tab="materials" class="active">Materials</button>
+      <button data-tab="recordings">Recordings</button>
+    </div>
+
+    <div id="tab-materials"></div>
+
+    <div id="tab-recordings" class="hidden">
+      <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+        <input id="search-input" type="text" placeholder="Search transcripts…" style="flex:1; padding:0.5rem; border:1px solid var(--border); border-radius:8px;" />
+        <button id="search-btn" class="btn-secondary">Search</button>
+      </div>
+      <div id="recordings-list"></div>
+    </div>
+
+    <div id="player-panel" class="hidden">
+      <button id="back-to-recordings" class="btn-secondary" style="margin-bottom:1rem;">← Back to recordings</button>
+      <h3 id="recording-title"></h3>
+      <video id="video-player" controls style="width:100%; max-width:800px; border-radius:8px;"></video>
+      <div style="margin-top:0.75rem; display:flex; gap:0.5rem;">
+        <button id="add-bookmark-btn" class="btn-secondary">Bookmark current moment</button>
+        <button id="generate-notes-btn" class="btn-secondary">AI: Generate notes from this class</button>
+      </div>
+      <div id="generate-notes-result"></div>
+      <h4>Bookmarks</h4>
+      <div id="bookmarks-list"></div>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/materials.js"></script>
+</body>
+</html>
