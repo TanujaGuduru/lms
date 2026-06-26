@@ -100,11 +100,17 @@ $router->group([
     $router->get('/exams/{id}/results', 'SuperAdmin\ExamController@results');
 
     // ── Assignments ────────────────────────────────────────────────────────────
-    $router->get('/assignments', 'SuperAdmin\AssignmentController@index', 'sa.assignments');
-    $router->get('/assignments/create', 'SuperAdmin\AssignmentController@create');
-    $router->post('/assignments/store', 'SuperAdmin\AssignmentController@store');
-    $router->get('/assignments/{id}', 'SuperAdmin\AssignmentController@show');
-    $router->get('/assignments/{id}/submissions', 'SuperAdmin\AssignmentController@submissions');
+    // Routes disabled: App\Controllers\SuperAdmin\AssignmentController was never
+    // implemented (no controller file, no view folder exists either) - these
+    // routes 500'd with "Class not found" rather than a normal 404. The sidebar
+    // nav link at resources/views/layouts/super-admin.php still points to
+    // /super-admin/assignments and will now 404 instead of crashing, until a
+    // real implementation is built.
+    // $router->get('/assignments', 'SuperAdmin\AssignmentController@index', 'sa.assignments');
+    // $router->get('/assignments/create', 'SuperAdmin\AssignmentController@create');
+    // $router->post('/assignments/store', 'SuperAdmin\AssignmentController@store');
+    // $router->get('/assignments/{id}', 'SuperAdmin\AssignmentController@show');
+    // $router->get('/assignments/{id}/submissions', 'SuperAdmin\AssignmentController@submissions');
 
     // ── Certificates ───────────────────────────────────────────────────────────
     $router->get('/certificates', 'SuperAdmin\CertificateController@index', 'sa.certificates');

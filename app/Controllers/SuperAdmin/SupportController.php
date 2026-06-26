@@ -15,7 +15,7 @@ class SupportController extends Controller
     {
         $this->authorize('support.view');
 
-        $where  = ['t.deleted_at IS NULL'];
+        $where  = ['1=1'];
         $params = [];
 
         if ($s = $request->input('search')) {
@@ -51,7 +51,7 @@ class SupportController extends Controller
              SUM(status='in_progress') in_progress,
              SUM(status='resolved') resolved,
              SUM(priority='urgent') urgent
-             FROM support_tickets WHERE deleted_at IS NULL"
+             FROM support_tickets"
         ) ?: [];
 
         $agents = $this->db->select(

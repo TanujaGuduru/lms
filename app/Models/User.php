@@ -110,7 +110,7 @@ class User extends Model
     public function getRecentUsers(int $limit = 10): array
     {
         return $this->db->select(
-            "SELECT u.id, u.first_name, u.last_name, u.email, u.avatar, u.status, u.created_at, r.name as role_name, r.color as role_color
+            "SELECT u.id, u.first_name, u.last_name, u.email, u.avatar, u.status, u.created_at, u.last_login_at, r.name as role_name, r.color as role_color
              FROM users u LEFT JOIN roles r ON r.id = u.role_id
              WHERE u.deleted_at IS NULL ORDER BY u.created_at DESC LIMIT ?",
             [$limit]
