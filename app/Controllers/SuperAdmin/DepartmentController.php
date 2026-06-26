@@ -16,10 +16,9 @@ class DepartmentController extends Controller
 
         $departments = $this->db->select(
             "SELECT d.*, COUNT(DISTINCT c.id) course_count,
-             COUNT(DISTINCT u.id) teacher_count
+             COUNT(DISTINCT c.instructor_id) teacher_count
              FROM departments d
              LEFT JOIN courses c ON c.department_id=d.id AND c.deleted_at IS NULL
-             LEFT JOIN users u ON u.department_id=d.id
              WHERE d.deleted_at IS NULL
              GROUP BY d.id ORDER BY d.name"
         );

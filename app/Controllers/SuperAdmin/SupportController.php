@@ -151,7 +151,7 @@ class SupportController extends Controller
             [$id, $currentId, $data['message'], $isInternal ? 1 : 0]
         );
 
-        $this->db->query("UPDATE support_tickets SET last_reply_at=NOW(), updated_at=NOW() WHERE id=?", [$id]);
+        $this->db->query("UPDATE support_tickets SET updated_at=NOW() WHERE id=?", [$id]);
         AuditLogger::log('ticket_replied', 'support', (string)$id);
 
         if (!$isInternal && $ticket && (int)$ticket['user_id'] !== $currentId) {

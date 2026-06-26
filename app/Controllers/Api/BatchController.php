@@ -52,7 +52,7 @@ class BatchController
         if (!$batch) { $this->json(['success'=>false,'message'=>'Batch not found'], 404); return; }
 
         $students = $db->fetchAll(
-            "SELECT u.id, u.first_name, u.last_name, u.email, bs.joined_at
+            "SELECT u.id, u.first_name, u.last_name, u.email, bs.enrolled_at
              FROM batch_students bs
              JOIN users u ON u.id = bs.student_id
              WHERE bs.batch_id = ?",
