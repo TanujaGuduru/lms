@@ -68,7 +68,6 @@ class Auth
             'user_id'       => $user['id'],
             'session_token' => $token,
             'ip_address'    => $ip,
-            'user_agent'    => $_SERVER['HTTP_USER_AGENT'] ?? '',
             'created_at'    => $now,
             'expires_at'    => $remember ? date('Y-m-d H:i:s', strtotime('+30 days')) : date('Y-m-d H:i:s', strtotime('+2 hours')),
         ]);
