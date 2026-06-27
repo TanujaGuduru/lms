@@ -9,7 +9,14 @@ use App\Core\Session;
 
 class CsrfMiddleware
 {
-    private array $except = ['/api/', '/webhook/'];
+    // /api/ used to be exempted wholesale, which meant the protected
+    // /api/v1/* group (routes/api.php) had no CSRF check at all - it relies
+    // on the same ambient session cookie as the rest of this app, so it
+    // needs the same protection. /webhook/ stays exempted: those calls
+    // come from external services authenticated by their own signature
+    // scheme, not a browser session, so a same-site CSRF token is never
+    // going to be present for them in the first place.
+    private array $except = ['/webhook/'];
 
     public function handle(Request $request): mixed
     {

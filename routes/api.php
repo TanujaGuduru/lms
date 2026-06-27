@@ -1,6 +1,7 @@
 <?php
 
 use App\Middleware\AuthMiddleware;
+use App\Middleware\CsrfMiddleware;
 
 define('IS_API', str_starts_with(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/api'));
 
@@ -12,7 +13,7 @@ $router->group(['prefix' => 'api/v1'], function ($router) {
     $router->post('/auth/refresh', 'Api\AuthController@refresh');
 
     // Protected API
-    $router->group(['middleware' => [AuthMiddleware::class]], function ($router) {
+    $router->group(['middleware' => [AuthMiddleware::class, CsrfMiddleware::class]], function ($router) {
         $router->post('/auth/logout', 'Api\AuthController@logout');
         $router->get('/me', 'Api\AuthController@me');
 
