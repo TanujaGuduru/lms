@@ -95,7 +95,7 @@
           <td><?= \App\Core\View::badge($c['status']) ?></td>
           <td>
             <?php if ($c['status'] === 'scheduled'): ?>
-            <button onclick="cancelClass(<?= $c['id'] ?>, '<?= \App\Core\View::e($c['title']) ?>')" class="btn btn-danger btn-sm btn-icon" title="Cancel">
+            <button onclick="cancelClass(<?= $c['id'] ?>, '<?= \App\Core\View::e(addslashes($c['title'])) ?>')" class="btn btn-danger btn-sm btn-icon" title="Cancel">
               <i class="fas fa-times"></i>
             </button>
             <?php endif; ?>
