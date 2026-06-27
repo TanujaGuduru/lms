@@ -36,6 +36,10 @@
         <?php if ($tpl['background_image']): ?>
         <img src="<?= \App\Core\View::e($tpl['background_image']) ?>" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3">
         <?php endif; ?>
+        <!-- Fixed dark overlay — background_color is admin-chosen and could be
+             anything including white/light, but the text below is always
+             white, so this guarantees readability regardless of that choice. -->
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.45),rgba(0,0,0,.25))"></div>
         <div style="text-align:center;position:relative;z-index:1">
           <div style="font-size:11px;text-transform:uppercase;letter-spacing:3px;color:rgba(255,255,255,.7)">This certifies that</div>
           <div style="font-size:20px;font-weight:900;color:#fff;font-family:Georgia,serif;margin:6px 0">Student Name</div>
