@@ -98,7 +98,19 @@ class Request
 
     public function header(string $name, string $default = ''): string
     {
-        $key = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
+        // Content-Type and Content-Length are the one well-documented
+        // exception to the HTTP_-prefix convention PHP's CGI/Apache SAPI
+        // uses for every other header — they're exposed as $_SERVER['CONTENT_TYPE']/
+        // ['CONTENT_LENGTH'] directly, never with an HTTP_ prefix. PHP's own
+        // built-in dev server (php -S) happens to populate both forms, which
+        // masked this everywhere this app was tested before a real Apache
+        // deployment — on Apache, only the unprefixed form actually exists.
+        $normalized = strtoupper(str_replace('-', '_', $name));
+        if ($normalized === 'CONTENT_TYPE' || $normalized === 'CONTENT_LENGTH') {
+            return $_SERVER[$normalized] ?? $default;
+        }
+
+        $key = 'HTTP_' . $normalized;
         return $_SERVER[$key] ?? $default;
     }
 
