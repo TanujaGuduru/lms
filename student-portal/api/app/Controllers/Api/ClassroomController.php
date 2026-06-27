@@ -66,7 +66,7 @@ class ClassroomController extends Controller
     public function heartbeat(Request $request, string $classId): void
     {
         $user = $this->currentUser();
-        $class = $this->requireClass($classId);
+        $class = $this->requireEnrolledClass($classId, $user);
         $now = date('Y-m-d H:i:s');
 
         $existing = $this->db->fetchOne(
@@ -109,7 +109,7 @@ class ClassroomController extends Controller
     public function leave(Request $request, string $classId): void
     {
         $user = $this->currentUser();
-        $class = $this->requireClass($classId);
+        $class = $this->requireEnrolledClass($classId, $user);
 
         $existing = $this->db->fetchOne(
             'SELECT * FROM attendance WHERE live_class_id = ? AND student_id = ? ORDER BY id DESC LIMIT 1',
@@ -182,7 +182,7 @@ class ClassroomController extends Controller
     public function signal(Request $request, string $classId): void
     {
         $user = $this->currentUser();
-        $class = $this->requireClass($classId);
+        $class = $this->requireEnrolledClass($classId, $user);
 
         $toUserId = (int) $request->input('to_user_id', 0);
         $type = (string) $request->input('type', '');
@@ -214,7 +214,7 @@ class ClassroomController extends Controller
     public function pollSignals(Request $request, string $classId): void
     {
         $user = $this->currentUser();
-        $class = $this->requireClass($classId);
+        $class = $this->requireEnrolledClass($classId, $user);
 
         $rows = $this->db->select(
             "SELECT * FROM webrtc_signals WHERE live_class_id = ? AND to_user_id = ? AND consumed_at IS NULL ORDER BY id",
@@ -241,7 +241,7 @@ class ClassroomController extends Controller
     public function sendChatMessage(Request $request, string $classId): void
     {
         $user = $this->currentUser();
-        $class = $this->requireClass($classId);
+        $class = $this->requireEnrolledClass($classId, $user);
         $message = trim((string) $request->input('message', ''));
 
         if (! $message) {
@@ -262,7 +262,8 @@ class ClassroomController extends Controller
 
     public function pollChatMessages(Request $request, string $classId): void
     {
-        $class = $this->requireClass($classId);
+        $user = $this->currentUser();
+        $class = $this->requireEnrolledClass($classId, $user);
         $afterId = (int) $request->input('after_id', 0);
 
         $rows = $this->db->select(
@@ -283,18 +284,7 @@ class ClassroomController extends Controller
 
     private function authorizeJoin(string $classId, array $user): array
     {
-        $class = $this->db->fetchOne('SELECT * FROM live_classes WHERE id = ?', [$classId]);
-        if (! $class) {
-            $this->fail('No such class.', ['reason' => ['not_found']], 404);
-        }
-
-        $membership = $this->db->fetchOne(
-            "SELECT id FROM batch_students WHERE batch_id = ? AND student_id = ? AND status = 'active'",
-            [$class['batch_id'], $user['id']]
-        );
-        if (! $membership) {
-            $this->fail('Not enrolled in this class.', ['reason' => ['not_enrolled']], 403);
-        }
+        $class = $this->requireEnrolledClass($classId, $user);
 
         if ($user['status'] !== 'active') {
             $this->fail('Account is not active.', ['reason' => ['account_pending_consent']], 403);
@@ -306,6 +296,30 @@ class ClassroomController extends Controller
         }
         if (in_array($class['status'], ['cancelled', 'completed'], true)) {
             $this->fail('This class is not open.', ['reason' => ['class_not_open']], 403);
+        }
+
+        return $class;
+    }
+
+    /**
+     * Every endpoint here except join() (which calls authorizeJoin() instead,
+     * layering its own time-window/status checks on top of this same check)
+     * used to call requireClass() alone - which only verified the class row
+     * exists, not that the caller's batch is actually enrolled in it. That
+     * let any authenticated student heartbeat/leave (fabricating attendance),
+     * signal, or read/post chat for a live class belonging to a batch they
+     * were never in. Fixed by routing every one of them through this.
+     */
+    private function requireEnrolledClass(string $classId, array $user): array
+    {
+        $class = $this->requireClass($classId);
+
+        $membership = $this->db->fetchOne(
+            "SELECT id FROM batch_students WHERE batch_id = ? AND student_id = ? AND status = 'active'",
+            [$class['batch_id'], $user['id']]
+        );
+        if (! $membership) {
+            $this->fail('Not enrolled in this class.', ['reason' => ['not_enrolled']], 403);
         }
 
         return $class;

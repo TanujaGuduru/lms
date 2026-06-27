@@ -224,13 +224,13 @@ function showLogDetail(idx) {
 
   if (d.old && d.new_val) {
     html += '<div class="row g-3">';
-    html += `<div class="col-md-6"><div style="font-size:12px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px"><i class="fas fa-minus-circle"></i> Before</div><pre style="font-size:12px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px;overflow:auto;max-height:300px">${JSON.stringify(d.old, null, 2)}</pre></div>`;
-    html += `<div class="col-md-6"><div style="font-size:12px;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px"><i class="fas fa-plus-circle"></i> After</div><pre style="font-size:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;overflow:auto;max-height:300px">${JSON.stringify(d.new_val, null, 2)}</pre></div>`;
+    html += `<div class="col-md-6"><div style="font-size:12px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px"><i class="fas fa-minus-circle"></i> Before</div><pre style="font-size:12px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px;overflow:auto;max-height:300px">${escHtml(JSON.stringify(d.old, null, 2))}</pre></div>`;
+    html += `<div class="col-md-6"><div style="font-size:12px;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px"><i class="fas fa-plus-circle"></i> After</div><pre style="font-size:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;overflow:auto;max-height:300px">${escHtml(JSON.stringify(d.new_val, null, 2))}</pre></div>`;
     html += '</div>';
   } else if (d.new_val) {
-    html += `<pre style="font-size:12px;background:#f8fafc;border-radius:8px;padding:12px">${JSON.stringify(d.new_val, null, 2)}</pre>`;
+    html += `<pre style="font-size:12px;background:#f8fafc;border-radius:8px;padding:12px">${escHtml(JSON.stringify(d.new_val, null, 2))}</pre>`;
   } else if (d.old) {
-    html += `<pre style="font-size:12px;background:#fef2f2;border-radius:8px;padding:12px">${JSON.stringify(d.old, null, 2)}</pre>`;
+    html += `<pre style="font-size:12px;background:#fef2f2;border-radius:8px;padding:12px">${escHtml(JSON.stringify(d.old, null, 2))}</pre>`;
   }
 
   document.getElementById('logDetailBody').innerHTML = html;

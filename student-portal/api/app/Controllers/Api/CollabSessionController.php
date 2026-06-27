@@ -135,10 +135,8 @@ class CollabSessionController extends Controller
 
     public function show(Request $request, string $id): void
     {
-        $session = $this->db->fetchOne('SELECT * FROM collab_sessions WHERE id = ?', [$id]);
-        if (! $session) {
-            $this->fail('No such session.', ['reason' => ['not_found']], 404);
-        }
+        $user = $this->currentUser();
+        $session = $this->requireParticipant($id, (int) $user['id']);
 
         $participants = $this->db->select(
             "SELECT cp.user_id, cp.role, cp.joined_at, cp.left_at, u.first_name, u.last_name
@@ -167,6 +165,7 @@ class CollabSessionController extends Controller
     {
         $user = $this->currentUser();
         $this->requireActiveSession($id);
+        $this->ensureParticipant($id, (int) $user['id']);
 
         $toUserId = (int) $request->input('to_user_id', 0);
         $type = (string) $request->input('type', '');
@@ -190,6 +189,7 @@ class CollabSessionController extends Controller
     public function pollSignals(Request $request, string $id): void
     {
         $user = $this->currentUser();
+        $this->ensureParticipant($id, (int) $user['id']);
 
         $rows = $this->db->select(
             'SELECT * FROM collab_signals WHERE collab_session_id = ? AND to_user_id = ? AND consumed_at IS NULL ORDER BY id',
@@ -215,6 +215,37 @@ class CollabSessionController extends Controller
             $this->fail('No such session.', ['reason' => ['not_found']], 404);
         }
         return $session;
+    }
+
+    /**
+     * show()/signal()/pollSignals() used to skip checking participation
+     * entirely - collab_sessions.id is a sequential auto-increment column,
+     * so any authenticated user could enumerate IDs and read another
+     * pair's session title, status, and participant names, or poll/send
+     * WebRTC signals into a session they never joined. join() is left
+     * exactly as-is (anyone holding a session id legitimately joins it,
+     * by design - 04h's documented sharing model); these calls now require
+     * having already done that via join() first.
+     */
+    private function requireParticipant(string $id, int $userId): array
+    {
+        $session = $this->db->fetchOne('SELECT * FROM collab_sessions WHERE id = ?', [$id]);
+        if (! $session) {
+            $this->fail('No such session.', ['reason' => ['not_found']], 404);
+        }
+        $this->ensureParticipant($id, $userId);
+        return $session;
+    }
+
+    private function ensureParticipant(string $id, int $userId): void
+    {
+        $participant = $this->db->fetchOne(
+            'SELECT id FROM collab_participants WHERE collab_session_id = ? AND user_id = ?',
+            [$id, $userId]
+        );
+        if (! $participant) {
+            $this->fail('Not a participant in this session.', ['reason' => ['not_participant']], 403);
+        }
     }
 
     private function currentParticipants(int $sessionId, int $excludeUserId): array

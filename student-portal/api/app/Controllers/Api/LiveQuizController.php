@@ -26,10 +26,22 @@ class LiveQuizController extends Controller
 {
     public function current(Request $request, string $classId): void
     {
+        // Every other method here scopes through requireQuiz()'s
+        // batch_students join - this one queried live_quizzes directly by
+        // classId with no such check, letting any authenticated student
+        // poll any class's live quiz (questions/options, not the answer
+        // key) regardless of their own batch. Mirrors requireQuiz()'s join
+        // for consistency rather than introducing a second authorization
+        // pattern.
+        $studentId = (int) $this->currentUser()['id'];
+
         $quiz = $this->db->fetchOne(
-            "SELECT * FROM live_quizzes WHERE live_class_id = ? AND launched_at IS NOT NULL AND closed_at IS NULL
-             ORDER BY launched_at DESC LIMIT 1",
-            [$classId]
+            "SELECT lq.* FROM live_quizzes lq
+             JOIN live_classes lc ON lc.id = lq.live_class_id
+             JOIN batch_students bs ON bs.batch_id = lc.batch_id AND bs.student_id = ?
+             WHERE lq.live_class_id = ? AND lq.launched_at IS NOT NULL AND lq.closed_at IS NULL
+             ORDER BY lq.launched_at DESC LIMIT 1",
+            [$studentId, $classId]
         );
 
         $this->success($quiz ? $this->shapeQuizState($quiz) : null);
