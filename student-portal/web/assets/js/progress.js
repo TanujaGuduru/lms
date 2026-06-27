@@ -20,7 +20,7 @@
 
   async function loadOverview() {
     const el = document.getElementById('tab-overview');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const [profile, badges] = await Promise.all([
         Api.get('/gamification/profile'),
@@ -54,7 +54,7 @@
 
   async function loadCourseProgress() {
     const el = document.getElementById('tab-course');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const me = await Api.get('/auth/me');
       if (!me.current_enrollment) {
@@ -90,7 +90,7 @@
 
   async function loadLeaderboard() {
     const el = document.getElementById('tab-leaderboard');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const rows = await Api.get('/leaderboard?scope=global');
       const me = await Api.get('/auth/me');
@@ -109,7 +109,7 @@
 
   async function loadInsights() {
     const el = document.getElementById('tab-insights');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const grouped = await Api.get('/progress/insights');
       const types = Object.keys(grouped);

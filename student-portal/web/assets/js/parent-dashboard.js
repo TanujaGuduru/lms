@@ -117,7 +117,7 @@
 
   async function loadOverview() {
     const el = document.getElementById('tab-overview');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const [dashboard, risk] = await Promise.all([
         Api.get(`/parent/students/${currentStudentId}/dashboard`),
@@ -169,7 +169,7 @@
 
   async function loadRecordings() {
     const el = document.getElementById('tab-recordings');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const rows = await Api.get(`/parent/students/${currentStudentId}/recordings`);
       el.innerHTML = rows.length
@@ -183,7 +183,7 @@
 
   async function loadWallet() {
     const el = document.getElementById('tab-wallet');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const wallet = await Api.get(`/parent/students/${currentStudentId}/wallet`);
       el.innerHTML = `
@@ -201,7 +201,7 @@
 
   async function loadReports() {
     const el = document.getElementById('tab-reports');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const reports = await Api.get(`/parent/students/${currentStudentId}/reports`);
       if (!reports.length) {

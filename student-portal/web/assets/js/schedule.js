@@ -30,7 +30,7 @@
     const monthStr = `${viewMonth.getFullYear()}-${String(viewMonth.getMonth() + 1).padStart(2, '0')}`;
     document.getElementById('month-label').textContent = viewMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
     const el = document.getElementById('calendar-events');
-    el.innerHTML = '<p class="subtitle">Loading…</p>';
+    el.innerHTML = '<div class="skeleton skeleton-block"></div><div class="skeleton skeleton-block"></div>';
     try {
       const events = await Api.get(`/schedule/calendar?month=${monthStr}`);
       if (!events.length) {
