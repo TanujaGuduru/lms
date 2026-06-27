@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - /bin/mkdir -p /home/pul96pd4pv3m/codegurukul-admin
+    - /usr/bin/rsync -a --exclude='.git' --exclude='.github' --exclude='.cpanel.yml' --exclude='docs' --exclude='*.md' --exclude='student-portal' --exclude='.env' --exclude='.env.*' ./ /home/pul96pd4pv3m/codegurukul-admin/
+    - /bin/mkdir -p /home/pul96pd4pv3m/public_html/lms.codegurukul.in
+    - /usr/bin/rsync -a --exclude='.env' --exclude='.env.*' ./student-portal/web/ /home/pul96pd4pv3m/public_html/lms.codegurukul.in/
+    - /bin/mkdir -p /home/pul96pd4pv3m/public_html/lms.codegurukul.in/api
+    - /usr/bin/rsync -a --exclude='.env' --exclude='.env.*' ./student-portal/api/ /home/pul96pd4pv3m/public_html/lms.codegurukul.in/api/
