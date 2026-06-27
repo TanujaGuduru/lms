@@ -67,8 +67,12 @@ $router->group([
     // ── Batches ────────────────────────────────────────────────────────────────
     $router->get('/batches', 'SuperAdmin\BatchController@index', 'sa.batches');
     $router->post('/batches/store', 'SuperAdmin\BatchController@store');
+    $router->get('/batches/{id}', 'SuperAdmin\BatchController@show', 'sa.batches.show');
+    $router->post('/batches/{id}/update', 'SuperAdmin\BatchController@update');
     $router->post('/batches/{id}/delete', 'SuperAdmin\BatchController@delete');
     $router->post('/batches/{id}/add-student', 'SuperAdmin\BatchController@addStudent');
+    $router->get('/batches/{id}/attendance', 'SuperAdmin\BatchController@attendance', 'sa.batches.attendance');
+    $router->post('/batches/{id}/attendance/save', 'SuperAdmin\BatchController@saveAttendance');
 
     // ── Live Classes ───────────────────────────────────────────────────────────
     $router->get('/live-classes', 'SuperAdmin\LiveClassController@index', 'sa.live-classes');
