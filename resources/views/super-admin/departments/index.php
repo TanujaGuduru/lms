@@ -51,7 +51,7 @@
                     <i class="fas fa-edit"></i>
                   </button>
                   <?php if ((int)$dept['courses_count'] === 0): ?>
-                  <button onclick="deleteDept(<?= $dept['id'] ?>, '<?= \App\Core\View::e($dept['name']) ?>')" class="btn btn-danger btn-sm btn-icon" title="Delete">
+                  <button onclick="deleteDept(<?= $dept['id'] ?>, '<?= \App\Core\View::e(addslashes($dept['name'])) ?>')" class="btn btn-danger btn-sm btn-icon" title="Delete">
                     <i class="fas fa-trash"></i>
                   </button>
                   <?php endif; ?>

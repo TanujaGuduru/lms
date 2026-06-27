@@ -129,13 +129,19 @@ class SecurityController extends Controller
 
         $page   = max(1, (int)$request->input('page', 1));
         $action = $request->input('filter', '');
-        $where  = $action ? "WHERE al.action = '{$action}'" : "WHERE al.action IN ('login','login_failed')";
+        if ($action) {
+            $where  = 'WHERE al.action = ?';
+            $params = [$action];
+        } else {
+            $where  = "WHERE al.action IN ('login','login_failed')";
+            $params = [];
+        }
 
         $result = $this->db->paginate(
             "SELECT al.*, CONCAT(u.first_name,' ',u.last_name) user_name, u.avatar
              FROM audit_logs al LEFT JOIN users u ON u.id=al.user_id
              {$where} ORDER BY al.created_at DESC",
-            [], $page, 30
+            $params, $page, 30
         );
 
         $this->render('super-admin.security.login-logs', [

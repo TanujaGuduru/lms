@@ -42,7 +42,7 @@ foreach ($rp as $r) {
   ?>
   <div class="col-xl col-md-4 col-sm-6">
     <div class="card role-card" data-role-id="<?= $role['id'] ?>" style="cursor:pointer;border-top:3px solid <?= $c ?>;transition:all .2s"
-         onclick="showRolePermissions(<?= $role['id'] ?>, '<?= htmlspecialchars($role['name']) ?>')"
+         onclick="showRolePermissions(<?= $role['id'] ?>, '<?= htmlspecialchars(addslashes($role['name'])) ?>')"
          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'"
          onmouseout="this.style.transform='';this.style.boxShadow=''">
       <div class="card-body py-4 text-center">
@@ -54,7 +54,7 @@ foreach ($rp as $r) {
         <div class="d-flex gap-2 justify-content-center">
           <?php if (!$role['is_system']): ?>
           <button onclick="event.stopPropagation();editRole(<?= $role['id'] ?>)" class="btn btn-ghost btn-sm" title="Edit"><i class="fas fa-edit"></i></button>
-          <button onclick="event.stopPropagation();cloneRole(<?= $role['id'] ?>, '<?= htmlspecialchars($role['name']) ?>')" class="btn btn-ghost btn-sm" title="Clone"><i class="fas fa-copy"></i></button>
+          <button onclick="event.stopPropagation();cloneRole(<?= $role['id'] ?>, '<?= htmlspecialchars(addslashes($role['name'])) ?>')" class="btn btn-ghost btn-sm" title="Clone"><i class="fas fa-copy"></i></button>
           <?php else: ?>
           <span class="badge badge-soft-secondary" style="font-size:11px"><i class="fas fa-lock"></i> System Role</span>
           <?php endif; ?>
