@@ -31,6 +31,14 @@ return [
     'assignment_reminder_overdue' => ['external_channels' => ['whatsapp'], 'mode' => 'fallback', 'batchable' => true],
     // 06 §7's own worked example for the domain_events outbox — fired by cron/process-domain-events.php.
     'batch_reassignment_notice' => ['external_channels' => ['whatsapp', 'email'], 'mode' => 'fallback', 'batchable' => false],
+    // Admin panel's "Schedule Live Class" feature — live_class.scheduled
+    // fires immediately via the domain_events outbox (cron/process-domain-events.php);
+    // live_class_reminder is a cadence (config/cadences.php) anchored 15
+    // minutes before start_datetime. Both go to the parent, not the
+    // student, and never batch — a same-day class reminder sitting in the
+    // queue until the next batch-drain tick would defeat the point.
+    'live_class_scheduled' => ['external_channels' => ['email'], 'mode' => 'fallback', 'batchable' => false],
+    'live_class_reminder_15min' => ['external_channels' => ['email'], 'mode' => 'fallback', 'batchable' => false],
     // Staff-facing ops alerts (08 §3) — never batched: "pages someone
     // immediately" is incompatible with sitting in notification_queue
     // until the next batch-drain tick.

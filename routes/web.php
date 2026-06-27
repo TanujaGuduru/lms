@@ -70,6 +70,11 @@ $router->group([
     $router->post('/batches/{id}/delete', 'SuperAdmin\BatchController@delete');
     $router->post('/batches/{id}/add-student', 'SuperAdmin\BatchController@addStudent');
 
+    // ── Live Classes ───────────────────────────────────────────────────────────
+    $router->get('/live-classes', 'SuperAdmin\LiveClassController@index', 'sa.live-classes');
+    $router->post('/live-classes/store', 'SuperAdmin\LiveClassController@store');
+    $router->post('/live-classes/{id}/cancel', 'SuperAdmin\LiveClassController@cancel');
+
     // ── Departments ────────────────────────────────────────────────────────────
     $router->get('/departments', 'SuperAdmin\DepartmentController@index', 'sa.departments');
     $router->post('/departments/store', 'SuperAdmin\DepartmentController@store');

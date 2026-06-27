@@ -86,15 +86,16 @@
 
         <div class="nav-item">
           <a href="#nav-academic" class="nav-link" data-bs-toggle="collapse"
-             aria-expanded="<?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/course') || str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/batch') ? 'true' : 'false' ?>">
+             aria-expanded="<?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/course') || str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/batch') || str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/live-class') ? 'true' : 'false' ?>">
             <span class="nav-icon"><i class="fas fa-book-open"></i></span>
             <span class="nav-label">Academic Mgmt</span>
             <i class="fas fa-chevron-right nav-arrow"></i>
           </a>
-          <div class="collapse nav-submenu <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/course') || str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/batch') ? 'show' : '' ?>" id="nav-academic">
-            <a href="/super-admin/courses"     class="nav-link <?= \App\Core\View::active('/super-admin/courses') ?>"><span class="nav-label">Courses</span></a>
-            <a href="/super-admin/batches"     class="nav-link <?= \App\Core\View::active('/super-admin/batches') ?>"><span class="nav-label">Batches</span></a>
-            <a href="/super-admin/departments" class="nav-link <?= \App\Core\View::active('/super-admin/departments') ?>"><span class="nav-label">Departments</span></a>
+          <div class="collapse nav-submenu <?= str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/course') || str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/batch') || str_contains($_SERVER['REQUEST_URI'] ?? '', '/super-admin/live-class') ? 'show' : '' ?>" id="nav-academic">
+            <a href="/super-admin/courses"      class="nav-link <?= \App\Core\View::active('/super-admin/courses') ?>"><span class="nav-label">Courses</span></a>
+            <a href="/super-admin/batches"      class="nav-link <?= \App\Core\View::active('/super-admin/batches') ?>"><span class="nav-label">Batches</span></a>
+            <a href="/super-admin/live-classes"  class="nav-link <?= \App\Core\View::active('/super-admin/live-classes') ?>"><span class="nav-label">Live Classes</span></a>
+            <a href="/super-admin/departments"  class="nav-link <?= \App\Core\View::active('/super-admin/departments') ?>"><span class="nav-label">Departments</span></a>
           </div>
         </div>
 

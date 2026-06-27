@@ -90,6 +90,18 @@ return [
         'in_app' => ['en' => ['version' => 'sla_breach_in_app_v1', 'subject' => 'Support SLA breach', 'body' => '{breach_summary}']],
         'email' => ['en' => ['version' => 'sla_breach_email_v1', 'subject' => 'ALERT: Support ticket SLA breach', 'body' => "{breach_summary}\n\n- CodeGurukul automated SLA monitor"]],
     ],
+    // Recipient is the PARENT for both — no {student_name} placeholder
+    // since one parent->many-children would make it ambiguous which child
+    // the message refers to (see cron/process-domain-events.php and
+    // config/cadences.php's own notes on this same constraint).
+    'live_class_scheduled' => [
+        'in_app' => ['en' => ['version' => 'live_class_scheduled_in_app_v1', 'subject' => 'Live class scheduled', 'body' => '"{class_title}" has been scheduled for {class_datetime}.']],
+        'email' => ['en' => ['version' => 'live_class_scheduled_email_v1', 'subject' => 'Live class scheduled: {class_title}', 'body' => "Hello,\n\nA live class has been scheduled:\n\n{class_title}\n{class_datetime}\n\nYou'll get a reminder 15 minutes before it starts.\n\n- CodeGurukul"]],
+    ],
+    'live_class_reminder_15min' => [
+        'in_app' => ['en' => ['version' => 'live_class_reminder_in_app_v1', 'subject' => 'Class starting soon', 'body' => '"{class_title}" starts in 15 minutes ({class_datetime}).']],
+        'email' => ['en' => ['version' => 'live_class_reminder_email_v1', 'subject' => 'Starting in 15 minutes: {class_title}', 'body' => "Hello,\n\nThis is a reminder that the following class starts in 15 minutes:\n\n{class_title}\n{class_datetime}\n\n- CodeGurukul"]],
+    ],
     '_default' => [
         'in_app' => ['en' => ['version' => 'generic_in_app_v1', 'subject' => 'Notification', 'body' => 'You have a new update.']],
     ],

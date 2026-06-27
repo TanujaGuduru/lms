@@ -37,4 +37,30 @@ return [
             [0, 'overdue'],
         ],
     ],
+    // Admin panel's "Schedule Live Class" feature — the "scheduled" notice
+    // itself goes out immediately via the domain_events outbox
+    // (cron/process-domain-events.php); this cadence is purely the
+    // 15-minutes-before reminder, evaluated independently since it's
+    // time-relative rather than triggered by the Admin's create action.
+    // Recipient is the PARENT, resolved the same way as elsewhere in this
+    // file — via batch_students -> parent_student_links, consent required.
+    // DISTINCT collapses a parent with two children in the same batch down
+    // to one row (and hence one reminder) for that class.
+    'live_class_reminder' => [
+        'trigger_event_prefix' => 'live_class_reminder',
+        'anchor_query' => "
+            SELECT DISTINCT psl.parent_id AS recipient_id, lc.id AS entity_id,
+                   lc.title AS class_title,
+                   DATE_FORMAT(lc.start_datetime, '%a, %d %b %Y at %h:%i %p') AS class_datetime,
+                   lc.start_datetime AS anchor_at
+            FROM live_classes lc
+            JOIN batch_students bs ON bs.batch_id = lc.batch_id
+            JOIN parent_student_links psl ON psl.student_id = bs.student_id AND psl.consent_status = 'granted'
+            WHERE lc.status = 'scheduled'
+        ",
+        'context_columns' => ['class_title', 'class_datetime'],
+        'offsets' => [
+            [-900, '15min'],
+        ],
+    ],
 ];

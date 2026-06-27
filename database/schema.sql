@@ -1216,3 +1216,16 @@ INSERT INTO `settings` (`group`,`key`,`value`,`type`,`label`,`description`,`is_p
 ('payment','gst_number','','text','GST Number','Institution GST number',0);
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ============================================================
+-- GAP-FILL: Live Class scheduling — recurrence support
+-- live_classes already gained timetable_id/class_type/cancelled_by/etc.
+-- from student-portal/api/database/schema_student_portal.sql §3; these
+-- three columns are the Admin panel's "Schedule Live Class" feature's own
+-- addition, layered the same additive way rather than forking the table.
+-- ============================================================
+ALTER TABLE `live_classes`
+  ADD COLUMN `recurrence_rule` ENUM('none','daily','weekly') DEFAULT 'none' AFTER `duration_minutes`,
+  ADD COLUMN `recurrence_end_date` DATE DEFAULT NULL AFTER `recurrence_rule`,
+  ADD COLUMN `parent_class_id` INT UNSIGNED DEFAULT NULL COMMENT 'links a generated occurrence back to the class that defined the recurring series' AFTER `recurrence_end_date`,
+  ADD CONSTRAINT `fk_liveclass_parent` FOREIGN KEY (`parent_class_id`) REFERENCES `live_classes`(`id`) ON DELETE SET NULL;
